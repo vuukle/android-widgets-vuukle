@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="VuukleCustomDialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/vuukle_translate_left_side</item>
+        <item name="android:windowExitAnimation">@anim/vuukle_translate_right_side</item>
+    </style>
+</resources>

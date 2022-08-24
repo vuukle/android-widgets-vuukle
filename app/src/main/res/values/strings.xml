@@ -1,0 +1,10 @@
+<resources>
+    <string name="facebook_app_id">200363216698029</string>
+    <string name="facebook_client_token">e9153a0f8194d413292e1c69cc5b7711</string>
+
+
+    <string name="fb_login_protocol_scheme">fb200363216698029</string>
+    <string name="app_name">VuukleNew</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
