@@ -3,6 +3,7 @@ package com.vuukle.sdk
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
+import com.vuukle.sdk.constants.keys.VuukleKeys
 import com.vuukle.sdk.exeptions.VuukleException
 import com.vuukle.sdk.impl.VuukleManagerImpl
 import com.vuukle.sdk.listeners.SSOEventListener
@@ -18,7 +19,7 @@ interface VuukleManager {
     // Initialize
     companion object {
         fun init(fragmentActivity: FragmentActivity) {
-
+            VuukleKeys.checkKeys()
             VuukleAndroidUtil.setActivity(fragmentActivity)
 
             if (VuukleAndroidUtil.getActivity().lifecycle.currentState != Lifecycle.State.INITIALIZED &&

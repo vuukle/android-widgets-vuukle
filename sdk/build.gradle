@@ -4,10 +4,6 @@ plugins {
     id 'maven-publish'
 }
 
-def apikeyPropertiesFile = rootProject.file("apikey.properties")
-def apikeyProperties = new Properties()
-apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
-
 android {
     lintOptions {
         abortOnError false
@@ -15,9 +11,6 @@ android {
     compileSdk 32
 
     defaultConfig {
-        // publisher public and private keys
-        buildConfigField("String", "PUBLISHER_PUBLIC_KEY", apikeyProperties['PUBLISHER_PUBLIC_KEY'])
-        buildConfigField("String", "PUBLISHER_PRIVATE_KEY", apikeyProperties['PUBLISHER_PRIVATE_KEY'])
         minSdk 19
         targetSdk 31
         versionCode 1
@@ -65,7 +58,7 @@ afterEvaluate {
 
                 groupId = 'com.github.vuukle'
                 artifactId = 'android-widgets-vuukle'
-                version = '1.0.0'
+                version = '1.0.1'
             }
         }
     }

@@ -7,7 +7,7 @@ import android.util.Base64.DEFAULT
 import android.util.Log
 import android.webkit.WebStorage
 import android.webkit.WebView
-import com.vuukle.sdk.BuildConfig
+import com.vuukle.sdk.constants.keys.VuukleKeys
 import com.vuukle.sdk.constants.logger.LoggerConstants
 import com.vuukle.sdk.manager.auth.model.AuthenticationModel
 import com.vuukle.sdk.manager.network.BaseApiClient
@@ -28,8 +28,8 @@ class AuthManager {
         const val cookiesKey = "saved_cookies"
     }
 
-    private val privateKey = BuildConfig.PUBLISHER_PRIVATE_KEY
-    private val publicKey = BuildConfig.PUBLISHER_PUBLIC_KEY
+    private val privateKey = VuukleKeys.getPrivateKey()
+    private val publicKey = VuukleKeys.getPublicKey()
     private val storageManager = StorageImpl()
 
     private var viewManager: VuukleViewManager? = VuukleViewManager
