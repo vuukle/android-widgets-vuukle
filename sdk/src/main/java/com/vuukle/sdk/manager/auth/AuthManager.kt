@@ -11,7 +11,8 @@ import com.vuukle.sdk.constants.keys.VuukleKeys
 import com.vuukle.sdk.constants.logger.LoggerConstants
 import com.vuukle.sdk.manager.auth.model.AuthenticationModel
 import com.vuukle.sdk.manager.network.BaseApiClient
-import com.vuukle.sdk.manager.storage.StorageImpl
+import com.vuukle.sdk.manager.storage.impl.StorageImpl
+import com.vuukle.sdk.manager.storage.impl.WebStorageManagerImpl
 import com.vuukle.sdk.manager.url.VuukleViewManager
 import com.vuukle.sdk.utils.VuukleManagerUtil
 import org.json.JSONObject
@@ -19,7 +20,6 @@ import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.util.*
-
 
 class AuthManager {
 
@@ -31,6 +31,7 @@ class AuthManager {
     private val privateKey = VuukleKeys.getPrivateKey()
     private val publicKey = VuukleKeys.getPublicKey()
     private val storageManager = StorageImpl()
+    private val webStorageManager = WebStorageManagerImpl()
 
     private var viewManager: VuukleViewManager? = VuukleViewManager
 

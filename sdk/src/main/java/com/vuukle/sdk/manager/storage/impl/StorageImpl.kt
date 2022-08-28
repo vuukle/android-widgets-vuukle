@@ -1,7 +1,8 @@
-package com.vuukle.sdk.manager.storage
+package com.vuukle.sdk.manager.storage.impl
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.vuukle.sdk.manager.storage.StorageManager
 import com.vuukle.sdk.utils.VuukleAndroidUtil
 
 
@@ -14,28 +15,24 @@ class StorageImpl() : StorageManager {
     }
 
     override fun putData(key: String, value: String) {
-
         val sharedPrefsEditor = getSharedPreferences().edit()
         sharedPrefsEditor?.putString(key, value)
         sharedPrefsEditor?.apply()
     }
 
     override fun putData(key: String, value: Int) {
-
         val sharedPrefsEditor = getSharedPreferences().edit()
         sharedPrefsEditor?.putInt(key, value)
         sharedPrefsEditor?.apply()
     }
 
     override fun putData(key: String, value: Boolean) {
-
         val sharedPrefsEditor = getSharedPreferences().edit()
         sharedPrefsEditor?.putBoolean(key, value)
         sharedPrefsEditor?.apply()
     }
 
     override fun putData(key: String, value: Float) {
-
         val sharedPrefsEditor = getSharedPreferences().edit()
         sharedPrefsEditor?.putFloat(key, value)
         sharedPrefsEditor?.apply()

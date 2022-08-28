@@ -14,7 +14,7 @@ import com.vuukle.sdk.listeners.SSOEventListener
 import com.vuukle.sdk.listeners.VuukleActionListener
 import com.vuukle.sdk.listeners.VuukleErrorListener
 import com.vuukle.sdk.listeners.VuukleEventListener
-import com.vuukle.sdk.manager.storage.StorageImpl
+import com.vuukle.sdk.manager.storage.impl.StorageImpl
 import com.vuukle.sdk.manager.url.VuukleViewManager
 import com.vuukle.sdk.model.VuukleEvent
 import com.vuukle.sdk.utils.ResultLauncherUtil
