@@ -21,6 +21,8 @@ import com.vuukle.sdk.listeners.VuukleActionListener
 import com.vuukle.sdk.listeners.WebViewStateListener
 import com.vuukle.sdk.manager.auth.AuthManager
 import com.vuukle.sdk.manager.storage.StorageManager
+import com.vuukle.sdk.manager.storage.WebStorageManager
+import com.vuukle.sdk.manager.storage.impl.WebStorageManagerImpl
 import com.vuukle.sdk.manager.url.VuukleViewManager
 import com.vuukle.sdk.utils.VuukleAndroidUtil
 import com.vuukle.sdk.utils.VuukleManagerUtil
@@ -39,6 +41,8 @@ class VuukleDialog(
 
     var popup: WebView? = null
     private var webView: WebView? = null
+
+    private val webStorageManager: WebStorageManager = WebStorageManagerImpl()
 
     fun openDialog(url: String) {
         if (isOpened) {
@@ -73,12 +77,14 @@ class VuukleDialog(
         vuukleTokenValue: String,
         webView: WebView
     ) {
-        val injection =
+        webStorageManager.putData(webView, "vuukle_token", vuukleTokenValue)
+
+        /*val injection =
             "javascript:window.localStorage.setItem('vuukle_token', '${vuukleTokenValue}')"
         webView.evaluateJavascript(injection) { result ->
             Log.e("testing---->>>", "saveLocalStorage $result")
-            Log.i(LoggerConstants.VUUKLE_LOGGER,"saveLocalStorage $result")
-        }
+            Log.e(LoggerConstants.VUUKLE_LOGGER, "saveLocalStorage $result")
+        }*/
     }
 
     private fun initLinearLayout() {

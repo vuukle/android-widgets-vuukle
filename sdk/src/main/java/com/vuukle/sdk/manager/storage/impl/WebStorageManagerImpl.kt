@@ -8,10 +8,11 @@ import com.vuukle.sdk.manager.storage.WebStorageManager
 class WebStorageManagerImpl : WebStorageManager {
 
     override fun putData(webView: WebView, key: String, value: String) {
-        val injection = "javascript:window.localStorage.setItem('$key', '${value}')"
+        val injection = "javascript:window.localStorage.setItem('$key', '$value')"
         webView.evaluateJavascript(injection) { result ->
             Log.e("testing---->>>", "saveLocalStorage $result")
             Log.e(LoggerConstants.VUUKLE_LOGGER, "saveLocalStorage $result")
+            Log.e(LoggerConstants.VUUKLE_LOGGER, "saved injection = $injection")
         }
     }
 
@@ -20,6 +21,7 @@ class WebStorageManagerImpl : WebStorageManager {
         webView.evaluateJavascript("javascript:window.localStorage.getItem('$key')") { result ->
             mResult = result
         }
+        Log.e(LoggerConstants.VUUKLE_LOGGER, "getStringData from web storage $mResult")
         return mResult
     }
 }

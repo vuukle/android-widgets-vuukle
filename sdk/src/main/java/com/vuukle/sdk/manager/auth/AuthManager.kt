@@ -63,7 +63,6 @@ class AuthManager {
                     onResult.invoke(null)
                 }
             }
-
         }.start()
     }
 
@@ -172,12 +171,16 @@ class AuthManager {
         Log.i("testing--->>>", "findTokenFromCookies")
         viewManager?.getAllViews()?.map { viewEntry ->
             Handler(Looper.getMainLooper()).post {
-                viewEntry.value.webView.evaluateJavascript(
+                val result = webStorageManager.getStringData(viewEntry.value.webView, "vuukle_token")
+                onResult(result ?: "")
+
+                /*viewEntry.value.webView.evaluateJavascript(
                     "javascript:window.localStorage.getItem('vuukle_token')"
                 ) { result ->
                     Log.e("testing---->>>", result)
+                    Log.i(LoggerConstants.VUUKLE_LOGGER, "getStringData from web storage $result")
                     onResult.invoke(result ?: "")
-                }
+                }*/
             }
             return@map
         }
@@ -255,10 +258,14 @@ class AuthManager {
         vuukleTokenValue: String,
         webView: WebView
     ) {
-        val injection = "javascript:window.localStorage.setItem('vuukle_token', '${vuukleTokenValue}')"
-        webView.evaluateJavascript(injection) { result ->
-            Log.e("testing---->>>", "saveLocalStorage $result")
-            Log.e(LoggerConstants.VUUKLE_LOGGER, "saveLocalStorage $result")
-        }
+        webStorageManager.putData(webView, "vuukle_token", vuukleTokenValue)
+
+        /* val injection =
+             "javascript:window.localStorage.setItem('vuukle_token', '${vuukleTokenValue}')"
+         webView.evaluateJavascript(injection) { result ->
+             Log.e("testing---->>>", "saveLocalStorage $result")
+             Log.i(LoggerConstants.VUUKLE_LOGGER, "saveLocalStorage $result")
+             Log.i(LoggerConstants.VUUKLE_LOGGER, "saved injection = $injection")
+         }*/
     }
 }

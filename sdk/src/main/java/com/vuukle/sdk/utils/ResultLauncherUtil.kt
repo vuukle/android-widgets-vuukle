@@ -33,8 +33,10 @@ object ResultLauncherUtil {
             ActivityResultContracts.StartActivityForResult()
         ) {
             val result =
-                if (it == null || it.data?.data == null || it.resultCode != Activity.RESULT_OK) null else arrayOf(
-                    it.data!!.data!!)
+                if (it == null || it.data?.data == null || it.resultCode != Activity.RESULT_OK)
+                    null
+                else
+                    arrayOf(it.data!!.data!!)
             result?.let {
                 uploadMessage?.onReceiveValue(result)
             } ?: kotlin.run {
