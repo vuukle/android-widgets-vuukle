@@ -186,7 +186,7 @@ class VuukleDialog(
     }
 
     override fun onPageFinishLoad(url: String?) {
-        CookieSyncManager.getInstance().sync();
+        Log.i(LoggerConstants.VUUKLE_LOGGER,"onPageFinishLoad===>>>")
         showLoader(false)
     }
 
