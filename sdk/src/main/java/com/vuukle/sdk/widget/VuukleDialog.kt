@@ -19,7 +19,6 @@ import com.vuukle.sdk.constants.logger.LoggerConstants
 import com.vuukle.sdk.helpers.VuukleWebViewConfigurationHelper
 import com.vuukle.sdk.listeners.VuukleActionListener
 import com.vuukle.sdk.listeners.WebViewStateListener
-import com.vuukle.sdk.manager.auth.AuthManager
 import com.vuukle.sdk.manager.storage.StorageManager
 import com.vuukle.sdk.manager.storage.WebStorageManager
 import com.vuukle.sdk.manager.storage.impl.WebStorageManagerImpl
@@ -62,9 +61,9 @@ class VuukleDialog(
                 actionListener = actionListener
             )
             // sync token with local storage
-            val token = storageManager.getStringData(AuthManager.cookiesKey)
+            val token = storageManager.getVuukleToken()
             if (!token.isNullOrEmpty()) {
-                saveLocalStorage(token, this)
+                saveToWebViewLocalStorage(token, this)
             }
             VuukleViewManager.addPopupWebView(this)
             // Load URL
@@ -73,18 +72,11 @@ class VuukleDialog(
         initLinearLayout()
     }
 
-    private fun saveLocalStorage(
+    private fun saveToWebViewLocalStorage(
         vuukleTokenValue: String,
         webView: WebView
     ) {
         webStorageManager.putData(webView, "vuukle_token", vuukleTokenValue)
-
-        /*val injection =
-            "javascript:window.localStorage.setItem('vuukle_token', '${vuukleTokenValue}')"
-        webView.evaluateJavascript(injection) { result ->
-            Log.e("testing---->>>", "saveLocalStorage $result")
-            Log.e(LoggerConstants.VUUKLE_LOGGER, "saveLocalStorage $result")
-        }*/
     }
 
     private fun initLinearLayout() {
@@ -154,7 +146,7 @@ class VuukleDialog(
 
     fun close() {
         vuukleWebChromeClient.recycleWindow()
-        VuukleManagerUtil.getAuthManager()?.saveCookies()
+        VuukleManagerUtil.getAuthManager()?.saveVuukleToken()
         dialog?.let {
             wrapper?.let {
                 it.removeView(popup)

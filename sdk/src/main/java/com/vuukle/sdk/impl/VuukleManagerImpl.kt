@@ -51,7 +51,7 @@ class VuukleManagerImpl(val lifecycleOwner: LifecycleOwner) : VuukleManager, Vuu
         }
 
         override fun onPause(owner: LifecycleOwner) {
-            VuukleManagerUtil.getAuthManager()?.saveCookies()
+            VuukleManagerUtil.getAuthManager()?.saveVuukleToken()
             super.onPause(owner)
         }
 
@@ -101,13 +101,13 @@ class VuukleManagerImpl(val lifecycleOwner: LifecycleOwner) : VuukleManager, Vuu
 
     override fun onReloadAndRestore() {
         viewManager?.reloadAll()
-        VuukleManagerUtil.getAuthManager()?.restoreCookies()
+        VuukleManagerUtil.getAuthManager()?.restoreVuukleToken()
     }
 
     override fun onReloadAndSave() {
         viewManager?.reloadAll()
         Thread{
-            VuukleManagerUtil.getAuthManager()?.saveCookies()
+            VuukleManagerUtil.getAuthManager()?.saveVuukleToken()
         }.start()
     }
 
@@ -176,7 +176,7 @@ class VuukleManagerImpl(val lifecycleOwner: LifecycleOwner) : VuukleManager, Vuu
     }
 
     fun onDestroy() {
-        VuukleManagerUtil.getAuthManager()?.saveCookies()
+        VuukleManagerUtil.getAuthManager()?.saveVuukleToken()
         lifecycleOwner.lifecycle.removeObserver(lifecycleObserver)
         viewManager?.destroy()
         viewManager = null

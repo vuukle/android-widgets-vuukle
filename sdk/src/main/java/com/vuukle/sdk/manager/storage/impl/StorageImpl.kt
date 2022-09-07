@@ -8,6 +8,10 @@ import com.vuukle.sdk.utils.VuukleAndroidUtil
 
 class StorageImpl() : StorageManager {
 
+    companion object {
+        const val vuukleTokenKey = "vuukle_token_key"
+    }
+
     private fun getSharedPreferences(): SharedPreferences {
         // Create the EncryptedSharedPreferences
         return VuukleAndroidUtil.getActivity()
@@ -37,6 +41,14 @@ class StorageImpl() : StorageManager {
         sharedPrefsEditor?.putFloat(key, value)
         sharedPrefsEditor?.apply()
     }
+
+    override fun saveVuukleToken(vuukleToken: String) {
+        val sharedPrefsEditor = getSharedPreferences().edit()
+        sharedPrefsEditor?.putString(vuukleTokenKey, vuukleToken)
+        sharedPrefsEditor?.apply()
+    }
+
+    override fun getVuukleToken(): String?  = getSharedPreferences().getString(vuukleTokenKey,"")
 
     override fun getBooleanData(key: String): Boolean = getSharedPreferences().getBoolean(key, false)
 

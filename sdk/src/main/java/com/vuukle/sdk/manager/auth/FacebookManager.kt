@@ -63,7 +63,7 @@ class FacebookManager {
 
                             if (token != null) {
                                 VuukleManagerUtil.getAuthManager()
-                                    ?.setAuthorizationCookieForVuukle(token)
+                                    ?.setAuthorizationTokenForVuukle(token)
                                 VuukleManagerUtil.getActionManager()?.reloadAndSave()
                             } else {
                                 VuukleManagerUtil.getActionManager()
@@ -114,7 +114,7 @@ class FacebookManager {
      */
     fun mockFacebookLogin(){
         VuukleManagerUtil.getAuthManager()
-            ?.setAuthorizationCookieForVuukle("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJuYXIuZGFsbEBtYWlsLnJ1IiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6Ik5hcmVrIERhbGxha3lhbiIsIlZ1dWtsZUNsYWltVHlwZXMuQXBpS2V5IjoiZDZjYmU4MWEtZWRmMy00MjYwLWFhODQtMDYwZjIxOTdlMGY0IiwiVnV1a2xlQ2xhaW1UeXBlcy5BdmF0YXIiOiJodHRwczovL2ltYWdlLnZ1dWtsZS5jb20vZDZjYmU4MWEtZWRmMy00MjYwLWFhODQtMDYwZjIxOTdlMGY0IiwiVnV1a2xlQ2xhaW1UeXBlcy5QYXNzd29yZEVudGVyZWQiOiIxIiwiaXNzIjoiVnV1a2xlQ29yZSIsImF1ZCI6IlZ1dWtsZUNvcmUifQ.A2llXu8_Yb3Bw7PrEKGk3lP5c3YEF0UTmtOsm8Q56og")
+            ?.setAuthorizationTokenForVuukle("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJuYXIuZGFsbEBtYWlsLnJ1IiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6Ik5hcmVrIERhbGxha3lhbiIsIlZ1dWtsZUNsYWltVHlwZXMuQXBpS2V5IjoiZDZjYmU4MWEtZWRmMy00MjYwLWFhODQtMDYwZjIxOTdlMGY0IiwiVnV1a2xlQ2xhaW1UeXBlcy5BdmF0YXIiOiJodHRwczovL2ltYWdlLnZ1dWtsZS5jb20vZDZjYmU4MWEtZWRmMy00MjYwLWFhODQtMDYwZjIxOTdlMGY0IiwiVnV1a2xlQ2xhaW1UeXBlcy5QYXNzd29yZEVudGVyZWQiOiIxIiwiaXNzIjoiVnV1a2xlQ29yZSIsImF1ZCI6IlZ1dWtsZUNvcmUifQ.A2llXu8_Yb3Bw7PrEKGk3lP5c3YEF0UTmtOsm8Q56og")
         VuukleManagerUtil.getActionManager()?.reloadAndSave()
     }
 

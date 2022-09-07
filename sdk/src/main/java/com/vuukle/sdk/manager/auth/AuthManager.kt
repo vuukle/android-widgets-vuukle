@@ -25,7 +25,6 @@ class AuthManager {
 
     companion object {
         const val tokenKey = "token"
-        const val cookiesKey = "saved_cookies"
     }
 
     private val privateKey = VuukleKeys.getPrivateKey()
@@ -34,7 +33,6 @@ class AuthManager {
     private val webStorageManager = WebStorageManagerImpl()
 
     private var viewManager: VuukleViewManager? = VuukleViewManager
-
 
     fun loginViaFacebook(fbToken: String, onResult: (String?) -> Unit) {
 
@@ -99,7 +97,7 @@ class AuthManager {
      */
     fun logout() {
         storageManager.putData(tokenKey, "")
-        removeCookies()
+        removeStorageData()
     }
 
     /**
@@ -143,22 +141,22 @@ class AuthManager {
         return token
     }
 
-    fun restoreCookies() {
+    fun restoreVuukleToken() {
         if (isLoggedIn()) return
-        val vuukleTokenString = storageManager.getStringData(cookiesKey)
-        Log.i("testing--->", "restoreCookies $vuukleTokenString")
-        Log.i(LoggerConstants.VUUKLE_LOGGER, "restoreCookies $vuukleTokenString")
-        setAuthorizationCookieForVuukle(vuukleTokenString!!)
+        val vuukleTokenString = storageManager.getVuukleToken()
+        Log.i("testing--->", "restoreVuukleToken $vuukleTokenString")
+        Log.i(LoggerConstants.VUUKLE_LOGGER, "restoreVuukleToken $vuukleTokenString")
+        setAuthorizationTokenForVuukle(vuukleTokenString!!)
     }
 
-    fun saveCookies() {
+    fun saveVuukleToken() {
         val urls = HashSet(VuukleManagerUtil.getUrlManager()?.getAllUrls())
         if (urls.isEmpty()) return
         Log.i(LoggerConstants.VUUKLE_LOGGER, "vuukle urls size = ${urls.size}")
         urls.forEach { _ ->
-            findTokenFromCookies { vuukleToken ->
+            findTokenFromWebViewLocalStorage { vuukleToken ->
                 if (vuukleToken != null) {
-                    storageManager.putData(cookiesKey, vuukleToken)
+                    storageManager.saveVuukleToken(vuukleToken)
                     Log.i("testing--->", vuukleToken.toString())
                     Log.i(LoggerConstants.VUUKLE_LOGGER, "vuukle token = $vuukleToken")
                 }
@@ -167,105 +165,45 @@ class AuthManager {
     }
 
     // "javascript:window.localStorage.getItem('vuukle_token')"
-    private fun findTokenFromCookies(onResult: (String?) -> Unit) {
-        Log.i("testing--->>>", "findTokenFromCookies")
+    private fun findTokenFromWebViewLocalStorage(onResult: (String?) -> Unit) {
+        Log.i("testing--->>>", "findTokenFromWebViewLocalStorage")
         viewManager?.getAllViews()?.map { viewEntry ->
             Handler(Looper.getMainLooper()).post {
-                val result = webStorageManager.getStringData(viewEntry.value.webView, "vuukle_token")
+                val result =
+                    webStorageManager.getStringData(viewEntry.value.webView, "vuukle_token")
                 onResult(result ?: "")
-
-                /*viewEntry.value.webView.evaluateJavascript(
-                    "javascript:window.localStorage.getItem('vuukle_token')"
-                ) { result ->
-                    Log.e("testing---->>>", result)
-                    Log.i(LoggerConstants.VUUKLE_LOGGER, "getStringData from web storage $result")
-                    onResult.invoke(result ?: "")
-                }*/
             }
             return@map
         }
     }
 
-    //// TODO: replaced saving data to cookie to localStorage
-//    private fun findTokenFromCookies(cookie: String?): String {
-//        if (cookie == null) return ""
-//        val tokenKey = "vuukle_token="
-//        val tokenStartIndex = cookie.indexOf(tokenKey)
-//        if (tokenStartIndex == -1) return ""
-//        val subStr = cookie.substring(tokenStartIndex + tokenKey.length)
-//        var endIndex = subStr.indexOf(";")
-//        if (endIndex == -1) endIndex = subStr.length
-//        return subStr.substring(0, endIndex)
-//    }
-
-    //// TODO: replaced saving data to cookie to localStorage
-//    private fun removeCookies() {
-//
-//        val cookieManager = CookieManager.getInstance()
-//        storageManager.putData(cookiesKey, "")
-//
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            cookieManager.removeAllCookies(null)
-//            cookieManager.flush()
-//        } else {
-//            val cookieSyncMngr = CookieSyncManager.createInstance(VuukleAndroidUtil.getActivity())
-//            cookieSyncMngr.startSync()
-//            val cookieManager = CookieManager.getInstance()
-//            cookieManager.removeAllCookie()
-//            cookieManager.removeSessionCookie()
-//            cookieSyncMngr.stopSync()
-//            cookieSyncMngr.sync()
-//        }
-//    }
-    private fun removeCookies() {
-        storageManager.putData(cookiesKey, "")
+    private fun removeStorageData() {
+        storageManager.saveVuukleToken("")
         WebStorage.getInstance().deleteAllData()
     }
 
-    fun setAuthorizationCookieForVuukle(
-        tokenCookie: String
-    ) {
+    fun setAuthorizationTokenForVuukle(vuukleToken: String) {
         val urls = VuukleManagerUtil.getUrlManager()?.getAllUrls()
         if (!urls.isNullOrEmpty()) {
             viewManager?.getAllViews()?.map { viewEntry ->
-                saveLocalStorage(
-                    tokenCookie,
+                saveToWebLocalStorage(
+                    vuukleToken,
                     viewEntry.value.webView
                 )
             }
             viewManager?.getAllPopupViews()?.map { popupWebView ->
-                saveLocalStorage(
-                    tokenCookie,
+                saveToWebLocalStorage(
+                    vuukleToken,
                     popupWebView
                 )
             }
         }
     }
 
-    // TODO: replaced saving data to cookie to localStorage
-//    fun setAuthorizationCookieForVuukle(tokenCookie: String) {
-//        val cookieManager = CookieManager.getInstance()
-//        val urls = VuukleManagerUtil.getUrlManager()?.getAllUrls()
-//        if (!urls.isNullOrEmpty()) {
-//            urls.forEach {
-//                cookieManager.setCookie(it, tokenCookie)
-//            }
-//        }
-//    }
-
-
-    private fun saveLocalStorage(
+    private fun saveToWebLocalStorage(
         vuukleTokenValue: String,
         webView: WebView
     ) {
         webStorageManager.putData(webView, "vuukle_token", vuukleTokenValue)
-
-        /* val injection =
-             "javascript:window.localStorage.setItem('vuukle_token', '${vuukleTokenValue}')"
-         webView.evaluateJavascript(injection) { result ->
-             Log.e("testing---->>>", "saveLocalStorage $result")
-             Log.i(LoggerConstants.VUUKLE_LOGGER, "saveLocalStorage $result")
-             Log.i(LoggerConstants.VUUKLE_LOGGER, "saved injection = $injection")
-         }*/
     }
 }

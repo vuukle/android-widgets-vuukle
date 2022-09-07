@@ -17,4 +17,8 @@ interface StorageManager {
     fun getIntData(key: String): Int?
 
     fun getStringData(key: String): String?
+
+    fun saveVuukleToken(vuukleToken:String)
+
+    fun getVuukleToken():String?
 }
