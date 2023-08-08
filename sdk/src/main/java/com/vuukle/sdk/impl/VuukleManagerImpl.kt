@@ -22,7 +22,7 @@ import com.vuukle.sdk.utils.ResultLauncherUtil
 import com.vuukle.sdk.utils.VuukleManagerUtil
 import com.vuukle.sdk.widget.VuukleDialog
 import com.vuukle.sdk.widget.VuukleView
-import java.util.*
+import java.util.UUID
 
 class VuukleManagerImpl(val lifecycleOwner: LifecycleOwner) : VuukleManager, VuukleActionListener {
 
@@ -34,11 +34,24 @@ class VuukleManagerImpl(val lifecycleOwner: LifecycleOwner) : VuukleManager, Vuu
 
     // Inner Callbacks
     private val openPopupCallback: (String, WebView) -> Unit = { url, webview ->
-        Log.i(LoggerConstants.VUUKLE_LOGGER,"openPopupCallback")
-        this.onOpenPopupWindow(url,webview)
+        Log.i(LoggerConstants.VUUKLE_LOGGER, "openPopupCallback")
+        this.onOpenPopupWindow(url, webview)
     }
-    private val webChromeClient = VuukleWebChromeClient(identifier, this, openPopupCallback)
-    private val popupDialog = VuukleDialog(identifier, StorageImpl(), webChromeClient, this)
+    private val closeDialogClosure: () -> Unit = { ->
+        popupDialog.close()
+    }
+    private val webChromeClient = VuukleWebChromeClient(
+        identifier = identifier,
+        actionListener = this,
+        openPopupCallback = openPopupCallback,
+        closeDialogClosure = closeDialogClosure
+    )
+    private val popupDialog = VuukleDialog(
+        identifier = identifier,
+        storageManager = StorageImpl(),
+        vuukleWebChromeClient = webChromeClient,
+        actionListener = this
+    )
 
     // Listeners
     private var ssoEventListener: SSOEventListener? = null
@@ -72,7 +85,7 @@ class VuukleManagerImpl(val lifecycleOwner: LifecycleOwner) : VuukleManager, Vuu
         VuukleManagerUtil.getUrlManager()?.addUrl(vieIdentifier, url)
         Log.i(LoggerConstants.VUUKLE_LOGGER, "viewIdentifier = $vieIdentifier")
         viewManager?.addVuukleView(vieIdentifier, view)
-        Log.i(LoggerConstants.VUUKLE_LOGGER,"VuukleView added into viewManager")
+        Log.i(LoggerConstants.VUUKLE_LOGGER, "VuukleView added into viewManager")
         loadContent(vieIdentifier)
     }
 
@@ -107,7 +120,7 @@ class VuukleManagerImpl(val lifecycleOwner: LifecycleOwner) : VuukleManager, Vuu
 
     override fun onReloadAndSave() {
         viewManager?.reloadAll()
-        Thread{
+        Thread {
             VuukleManagerUtil.getAuthManager()?.saveVuukleToken()
         }.start()
     }
@@ -148,18 +161,19 @@ class VuukleManagerImpl(val lifecycleOwner: LifecycleOwner) : VuukleManager, Vuu
         VuukleManagerUtil.getActionManager()?.logout()
     }
 
-    override fun onEvent(event: VuukleEvent,  webView: WebView) {
-        if(eventListener != null){
+    override fun onEvent(event: VuukleEvent, webView: WebView) {
+        if (eventListener != null) {
             eventListener?.onNewEvent(event)
-        }else{
-            when(event){
+        } else {
+            when (event) {
                 is VuukleEvent.YouMindLikeClickEvent -> {
-                    Log.i(LoggerConstants.VUUKLE_LOGGER,"YouMindLikeClickEvent")
-                    onOpenPopupWindow(event.url,webView)
+                    Log.i(LoggerConstants.VUUKLE_LOGGER, "YouMindLikeClickEvent")
+                    onOpenPopupWindow(event.url, webView)
                 }
+
                 is VuukleEvent.TownTalkClickEvent -> {
-                    Log.i(LoggerConstants.VUUKLE_LOGGER,"TownTalkClickEvent")
-                    onOpenPopupWindow(event.url,webView)
+                    Log.i(LoggerConstants.VUUKLE_LOGGER, "TownTalkClickEvent")
+                    onOpenPopupWindow(event.url, webView)
                 }
             }
         }

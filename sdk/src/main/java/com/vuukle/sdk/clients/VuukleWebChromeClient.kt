@@ -11,7 +11,6 @@ import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.widget.Toast
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.vuukle.sdk.handlers.VuukleConsoleLogHandler
 import com.vuukle.sdk.helpers.VuukleWebViewConfigurationHelper
 import com.vuukle.sdk.listeners.VuukleActionListener
@@ -22,7 +21,8 @@ import com.vuukle.sdk.utils.VuukleAndroidUtil
 class VuukleWebChromeClient(
     private val identifier: Int,
     private val actionListener: VuukleActionListener?,
-    private val openPopupCallback: ((String, WebView) -> Unit)? = null
+    private val openPopupCallback: ((String, WebView) -> Unit)? = null,
+    private val closeDialogClosure: () -> Unit
 ) : WebChromeClient() {
 
     var window: WebView? = null
@@ -61,6 +61,11 @@ class VuukleWebChromeClient(
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             request.grant(request.resources)
         }
+    }
+
+    override fun onCloseWindow(window: WebView?) {
+        closeDialogClosure.invoke()
+        super.onCloseWindow(window)
     }
 
     override fun onCreateWindow(
