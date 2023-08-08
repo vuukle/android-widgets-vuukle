@@ -3,7 +3,7 @@ package com.vuukle.sdk.manager.url
 import android.webkit.WebView
 import com.vuukle.sdk.utils.VuukleManagerUtil
 import com.vuukle.sdk.widget.VuukleView
-import java.util.*
+import java.util.TreeMap
 
 object VuukleViewManager {
 
@@ -19,7 +19,7 @@ object VuukleViewManager {
         vuukleViews[identifier] = view
     }
 
-    fun getAllPopupViews():ArrayList<WebView> = popUpWebViews
+    fun getAllPopupViews(): ArrayList<WebView> = popUpWebViews
     fun getAllViews(): TreeMap<String, VuukleView> = vuukleViews
 
     fun getView(identifier: String): VuukleView? {

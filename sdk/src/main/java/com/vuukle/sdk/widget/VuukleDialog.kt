@@ -5,14 +5,16 @@ import android.content.DialogInterface
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
+import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
-import android.webkit.CookieSyncManager
 import android.webkit.WebView
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.RelativeLayout
-import android.widget.RelativeLayout.*
+import android.widget.RelativeLayout.CENTER_IN_PARENT
+import android.widget.RelativeLayout.LayoutParams
+import android.widget.RelativeLayout.TRUE
 import com.vuukle.sdk.clients.VuukleWebChromeClient
 import com.vuukle.sdk.clients.VuukleWebViewClient
 import com.vuukle.sdk.constants.logger.LoggerConstants
@@ -25,6 +27,7 @@ import com.vuukle.sdk.manager.storage.impl.WebStorageManagerImpl
 import com.vuukle.sdk.manager.url.VuukleViewManager
 import com.vuukle.sdk.utils.VuukleAndroidUtil
 import com.vuukle.sdk.utils.VuukleManagerUtil
+
 
 class VuukleDialog(
     private val identifier: Int,
@@ -43,19 +46,19 @@ class VuukleDialog(
 
     private val webStorageManager: WebStorageManager = WebStorageManagerImpl()
 
-    fun openDialog(url: String) {
+    fun openDialog(url: String, webView: WebView) {
         if (isOpened) {
-            onOpenPopupWindow(url)
+            onOpenPopupWindow(url, webView)
             return
         }
-        popup = WebView(VuukleAndroidUtil.getActivity())
+        popup = webView
         popup?.apply {
             VuukleWebViewConfigurationHelper.configure(this)
             this.webChromeClient = vuukleWebChromeClient
             this.webViewClient = VuukleWebViewClient(
                 identifier = identifier,
-                openPopupCallback = { url ->
-                    this@VuukleDialog.onOpenPopupWindow(url)
+                openPopupCallback = { url, webview ->
+                    this@VuukleDialog.onOpenPopupWindow(url, webview)
                 },
                 webViewStateListener = this@VuukleDialog,
                 actionListener = actionListener
@@ -87,6 +90,9 @@ class VuukleDialog(
         wrapper?.minimumHeight = MATCH_PARENT
         val keyboardHack = EditText(VuukleAndroidUtil.getActivity())
         keyboardHack.visibility = View.GONE
+        if (popup?.parent != null) {
+            (popup?.parent as? ViewGroup)?.removeView(popup)
+        }
         wrapper?.addView(
             popup,
             LinearLayout.LayoutParams.MATCH_PARENT,
@@ -128,7 +134,7 @@ class VuukleDialog(
     private fun initDialog(wrapper: RelativeLayout?) {
         val builder = AlertDialog.Builder(VuukleAndroidUtil.getActivity())
         builder.setNegativeButton("close") { v: DialogInterface?, l: Int ->
-            Log.i(LoggerConstants.VUUKLE_LOGGER,"close")
+            Log.i(LoggerConstants.VUUKLE_LOGGER, "close")
             close()
         }
         builder.setView(wrapper)
@@ -161,8 +167,8 @@ class VuukleDialog(
         }
     }
 
-    fun onOpenPopupWindow(url: String) {
-        Log.i(LoggerConstants.VUUKLE_LOGGER,"onOpenPopupWindow")
+    fun onOpenPopupWindow(url: String, webview: WebView) {
+        Log.i(LoggerConstants.VUUKLE_LOGGER, "onOpenPopupWindow")
         webView = WebView(VuukleAndroidUtil.getActivity())
 
         webView?.apply {
@@ -170,8 +176,8 @@ class VuukleDialog(
             this.webChromeClient = vuukleWebChromeClient
             this.webViewClient = VuukleWebViewClient(
                 identifier = identifier,
-                openPopupCallback = { url ->
-                    this@VuukleDialog.onOpenPopupWindow(url)
+                openPopupCallback = { url, webview ->
+                    this@VuukleDialog.onOpenPopupWindow(url, webview)
                 },
                 webViewStateListener = this@VuukleDialog
             )
@@ -186,7 +192,7 @@ class VuukleDialog(
     }
 
     override fun onPageFinishLoad(url: String?) {
-        Log.i(LoggerConstants.VUUKLE_LOGGER,"onPageFinishLoad===>>>")
+        Log.i(LoggerConstants.VUUKLE_LOGGER, "onPageFinishLoad===>>>")
         showLoader(false)
     }
 

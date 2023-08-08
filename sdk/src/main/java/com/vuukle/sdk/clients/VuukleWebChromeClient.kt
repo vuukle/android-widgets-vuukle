@@ -2,24 +2,27 @@ package com.vuukle.sdk.clients
 
 import android.content.Intent
 import android.net.Uri
-import android.net.wifi.p2p.WifiP2pManager
 import android.os.Build
 import android.os.Message
-import android.util.Log
-import android.webkit.*
+import android.webkit.ConsoleMessage
+import android.webkit.JsResult
+import android.webkit.PermissionRequest
+import android.webkit.ValueCallback
+import android.webkit.WebChromeClient
+import android.webkit.WebView
 import android.widget.Toast
-import androidx.appcompat.view.menu.ActionMenuItemView
-import com.facebook.internal.Logger
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.vuukle.sdk.handlers.VuukleConsoleLogHandler
 import com.vuukle.sdk.helpers.VuukleWebViewConfigurationHelper
 import com.vuukle.sdk.listeners.VuukleActionListener
 import com.vuukle.sdk.utils.ResultLauncherUtil
 import com.vuukle.sdk.utils.VuukleAndroidUtil
 
+
 class VuukleWebChromeClient(
     private val identifier: Int,
     private val actionListener: VuukleActionListener?,
-    private val openPopupCallback: ((String) -> Unit)? = null
+    private val openPopupCallback: ((String, WebView) -> Unit)? = null
 ) : WebChromeClient() {
 
     var window: WebView? = null
@@ -66,14 +69,14 @@ class VuukleWebChromeClient(
         isUserGesture: Boolean,
         resultMsg: Message,
     ): Boolean {
-        this.window = WebView(VuukleAndroidUtil.getActivity())
-        VuukleWebViewConfigurationHelper.configure(window!!)
         this.resultMessage = resultMsg
+        val transport = resultMsg.obj as WebView.WebViewTransport
+        this.window = WebView(VuukleAndroidUtil.getActivity())
+        VuukleWebViewConfigurationHelper.configure(this.window!!)
         window!!.webChromeClient = this
         window!!.webViewClient = VuukleWebViewClient(identifier, actionListener, openPopupCallback)
-        val transport = resultMessage?.obj as WebView.WebViewTransport
-        transport.webView = window
-        resultMessage?.sendToTarget()
+        transport.webView = this.window
+        resultMsg.sendToTarget()
         return true
     }
 

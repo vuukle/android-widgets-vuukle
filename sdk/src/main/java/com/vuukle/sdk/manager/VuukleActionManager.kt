@@ -8,10 +8,6 @@ class VuukleActionManager {
 
     private var observers = TreeMap<Int, VuukleActionListener>()
 
-    fun onOpenPopupWindow(observer: Int, url: String) {
-        if (observers.containsKey(observer))
-            observers[observer]!!.onOpenPopupWindow(url)
-    }
 
     fun reloadAndSave() {
         observers.forEach { it.value.onReloadAndSave() }

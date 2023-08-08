@@ -2,6 +2,7 @@ package com.vuukle.sdk.impl
 
 import android.util.Log
 import android.webkit.CookieManager
+import android.webkit.WebView
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.vuukle.sdk.VuukleManager
@@ -32,9 +33,9 @@ class VuukleManagerImpl(val lifecycleOwner: LifecycleOwner) : VuukleManager, Vuu
     private var viewManager: VuukleViewManager? = VuukleViewManager
 
     // Inner Callbacks
-    private val openPopupCallback: (String) -> Unit = { url ->
+    private val openPopupCallback: (String, WebView) -> Unit = { url, webview ->
         Log.i(LoggerConstants.VUUKLE_LOGGER,"openPopupCallback")
-        this.onOpenPopupWindow(url)
+        this.onOpenPopupWindow(url,webview)
     }
     private val webChromeClient = VuukleWebChromeClient(identifier, this, openPopupCallback)
     private val popupDialog = VuukleDialog(identifier, StorageImpl(), webChromeClient, this)
@@ -95,8 +96,8 @@ class VuukleManagerImpl(val lifecycleOwner: LifecycleOwner) : VuukleManager, Vuu
         eventListener = listener
     }
 
-    override fun onOpenPopupWindow(url: String) {
-        popupDialog.openDialog(url)
+    override fun onOpenPopupWindow(url: String, webView: WebView) {
+        popupDialog.openDialog(url, webView)
     }
 
     override fun onReloadAndRestore() {
@@ -147,18 +148,18 @@ class VuukleManagerImpl(val lifecycleOwner: LifecycleOwner) : VuukleManager, Vuu
         VuukleManagerUtil.getActionManager()?.logout()
     }
 
-    override fun onEvent(event: VuukleEvent) {
+    override fun onEvent(event: VuukleEvent,  webView: WebView) {
         if(eventListener != null){
             eventListener?.onNewEvent(event)
         }else{
             when(event){
                 is VuukleEvent.YouMindLikeClickEvent -> {
                     Log.i(LoggerConstants.VUUKLE_LOGGER,"YouMindLikeClickEvent")
-                    onOpenPopupWindow(event.url)
+                    onOpenPopupWindow(event.url,webView)
                 }
                 is VuukleEvent.TownTalkClickEvent -> {
                     Log.i(LoggerConstants.VUUKLE_LOGGER,"TownTalkClickEvent")
-                    onOpenPopupWindow(event.url)
+                    onOpenPopupWindow(event.url,webView)
                 }
             }
         }
