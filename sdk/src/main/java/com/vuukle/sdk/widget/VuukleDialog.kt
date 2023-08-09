@@ -39,6 +39,7 @@ class VuukleDialog(
 
     private var dialog: AlertDialog? = null
     private var isOpened = false
+    private var isDialog = false
     private var wrapper: RelativeLayout? = null
     private var progressBar: ProgressBar? = null
 
@@ -49,12 +50,15 @@ class VuukleDialog(
 
     fun openDialog(url: String, webView: WebView) {
         if (isOpened) {
-            Log.i("wpefowpef","isOpened = true")
+            Log.i("wpefowpef", "isOpened = true")
+            Log.i("wpefowpef", "isDialog = isDialog")
             onOpenPopupWindow(url, webView)
             return
         }
 
-        popup = webView
+//        popup = if (isDialog) webView else WebView(VuukleAndroidUtil.getActivity())
+        Log.i("wpefowpef", "isDialog = isDialog")
+        popup = if (isDialog) webView else WebView(VuukleAndroidUtil.getActivity())
         popup?.apply {
             VuukleWebViewConfigurationHelper.configure(this)
             this.webChromeClient = vuukleWebChromeClient
@@ -72,9 +76,9 @@ class VuukleDialog(
                 saveToWebViewLocalStorage(token, this)
             }
             VuukleViewManager.addPopupWebView(this)
-            Log.i("peodkwpeokdf","url = $url")
-            Log.i("peodkwpeokdf","webview url = ${webView.url}")
-            Log.i("peodkwpeokdf","webView.certificate = ${webView.hitTestResult.extra}")
+            Log.i("peodkwpeokdf", "url = $url")
+            Log.i("peodkwpeokdf", "webview url = ${webView.url}")
+            Log.i("peodkwpeokdf", "webView.certificate = ${webView.hitTestResult.extra}")
             // Load URL
             this.loadUrl(url)
         }
@@ -207,5 +211,9 @@ class VuukleDialog(
         } else {
             close()
         }
+    }
+
+    fun setIsDialog(isDialog: Boolean) {
+        this.isDialog = isDialog
     }
 }

@@ -40,11 +40,16 @@ class VuukleManagerImpl(val lifecycleOwner: LifecycleOwner) : VuukleManager, Vuu
     private val closeDialogClosure: () -> Unit = { ->
         popupDialog.close()
     }
+
+    private val isDialog: (Boolean) -> Unit = {
+        popupDialog.setIsDialog(it)
+    }
     private val webChromeClient = VuukleWebChromeClient(
         identifier = identifier,
         actionListener = this,
         openPopupCallback = openPopupCallback,
-        closeDialogClosure = closeDialogClosure
+        closeDialogClosure = closeDialogClosure,
+        isDialog = isDialog
     )
     private val popupDialog = VuukleDialog(
         identifier = identifier,
@@ -173,6 +178,7 @@ class VuukleManagerImpl(val lifecycleOwner: LifecycleOwner) : VuukleManager, Vuu
 
                 is VuukleEvent.TownTalkClickEvent -> {
                     Log.i(LoggerConstants.VUUKLE_LOGGER, "TownTalkClickEvent")
+                    Log.i(LoggerConstants.VUUKLE_LOGGER, "event.url = ${event.url}")
                     onOpenPopupWindow(event.url, webView)
                 }
             }

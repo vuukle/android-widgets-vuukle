@@ -22,7 +22,8 @@ class VuukleWebChromeClient(
     private val identifier: Int,
     private val actionListener: VuukleActionListener?,
     private val openPopupCallback: ((String, WebView) -> Unit)? = null,
-    private val closeDialogClosure: () -> Unit
+    private val closeDialogClosure: () -> Unit,
+    private val isDialog:(Boolean) -> Unit
 ) : WebChromeClient() {
 
     var window: WebView? = null
@@ -75,6 +76,7 @@ class VuukleWebChromeClient(
         resultMsg: Message,
     ): Boolean {
         this.resultMessage = resultMsg
+        this.isDialog.invoke(isDialog)
         val transport = resultMsg.obj as WebView.WebViewTransport
         this.window = WebView(VuukleAndroidUtil.getActivity())
         VuukleWebViewConfigurationHelper.configure(this.window!!)

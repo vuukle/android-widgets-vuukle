@@ -21,17 +21,17 @@ class VuukleWebViewClient(
     override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
 
         val isExternalAppOpened = externalAppHandler.handleExternalApp(url)
-        Log.i(LoggerConstants.VUUKLE_LOGGER,"isExternalAppOpened = $isExternalAppOpened")
+        Log.i(LoggerConstants.VUUKLE_LOGGER, "isExternalAppOpened = $isExternalAppOpened")
         if (isExternalAppOpened) return true
 
-        Log.i(LoggerConstants.VUUKLE_LOGGER,"url = $url")
+        Log.i(LoggerConstants.VUUKLE_LOGGER, "url = $url")
         val event = EventUtil.createEventByUrl(url)
-        if(event != null && actionListener != null){
-            Log.i(LoggerConstants.VUUKLE_LOGGER,"event = $event")
+        if (event != null && actionListener != null) {
+            Log.i(LoggerConstants.VUUKLE_LOGGER, "event = $event")
             actionListener.onEvent(event, view)
             return true
-        } else if(openPopupCallback != null) {
-            Log.i(LoggerConstants.VUUKLE_LOGGER,"open dialog from invoke")
+        } else if (openPopupCallback != null) {
+            Log.i(LoggerConstants.VUUKLE_LOGGER, "open dialog from invoke")
             openPopupCallback.invoke(url, view)
             return true
         }
