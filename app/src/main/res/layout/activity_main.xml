@@ -5,6 +5,17 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:layout_marginHorizontal="45dp"
+        android:text="Examples"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="36dp"
+        android:textStyle="bold"/>
+
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -12,25 +23,48 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/sample_button"
-            android:layout_width="wrap_content"
+            android:id="@+id/quizly_button"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="45dp"
             android:layout_centerHorizontal="true"
-            android:text="Sample Example" />
+            android:text="@string/quizly" />
+
+        <Button
+            android:id="@+id/comments_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/quizly_button"
+            android:layout_marginTop="20dp"
+            android:layout_marginHorizontal="45dp"
+            android:layout_centerHorizontal="true"
+            android:text="@string/comments" />
+
+        <Button
+            android:id="@+id/share_bar_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/comments_button"
+            android:layout_marginTop="20dp"
+            android:layout_marginHorizontal="45dp"
+            android:layout_centerHorizontal="true"
+            android:text="@string/share_bar" />
 
         <Button
             android:id="@+id/view_pager_button"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/sample_button"
+            android:layout_below="@+id/share_bar_button"
+            android:layout_marginHorizontal="45dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
             android:text="View Pager Example" />
 
         <Button
             android:id="@+id/view_pager_plus_nested_scroll_view_button"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="45dp"
             android:layout_below="@+id/view_pager_button"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"

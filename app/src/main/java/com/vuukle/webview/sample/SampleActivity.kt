@@ -15,32 +15,43 @@ import com.vuukle.sdk.listeners.VuukleErrorListener
 import com.vuukle.sdk.listeners.VuukleEventListener
 import com.vuukle.sdk.model.VuukleEvent
 import com.vuukle.sdk.widget.VuukleView
+import com.vuukle.webview.MainActivity.Companion.URL
 import com.vuukle.webview.R
 import com.vuukle.webview.constants.VuukleConstants
 
 class SampleActivity : AppCompatActivity() {
 
     private lateinit var vuukleManager: VuukleManager
-    private lateinit var commentsView: VuukleView
-    private lateinit var shareBarView: VuukleView
+    private lateinit var vuukleView: VuukleView
     private lateinit var loginSSOButton: Button
     private lateinit var logoutSSOButton: Button
+    private var url: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         setContentView(R.layout.activity_sample)
+        getDataFromBundle()
         initViews()
         VuukleManager.init(this)
         createVuukleManager()
-        initSSOFunctionality()
+        if (url == VuukleConstants.COMMENTS_URL) {
+            initSSOFunctionality()
+        }
+    }
+
+    private fun getDataFromBundle() {
+        url = intent.getStringExtra(URL) ?: VuukleConstants.QUIZLY_URL
     }
 
     private fun initViews() {
+        vuukleView = findViewById(R.id.vuukleView)
+        if (url == VuukleConstants.COMMENTS_URL) {
+            createActionBar()
+        }
+    }
 
-        commentsView = findViewById(R.id.commentsView)
-        shareBarView = findViewById(R.id.shareBarView)
-        // create action bar
+    private fun createActionBar() {
         val actionBar: ActionBar = supportActionBar ?: return
         actionBar.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
         actionBar.setDisplayShowCustomEnabled(true)
@@ -61,9 +72,7 @@ class SampleActivity : AppCompatActivity() {
         })
 
         // load comments in VuukleView
-        vuukleManager.load(commentsView, VuukleConstants.COMMENTS_URL)
-        // load share bar in VuukleView
-        vuukleManager.load(shareBarView, VuukleConstants.SHARE_BAR_URL)
+        vuukleManager.load(vuukleView, url)
         // Handle vuukle events
         // If you did not set event listener by default all events will be handled by VuukleManager
         vuukleManager.setEventListener(object : VuukleEventListener {
@@ -71,11 +80,12 @@ class SampleActivity : AppCompatActivity() {
                 when (event) {
                     is VuukleEvent.TownTalkClickEvent -> {
                         /* Handle */
-                        Log.i(LoggerConstants.VUUKLE_LOGGER,"TownTalkClickEvent")
+                        Log.i(LoggerConstants.VUUKLE_LOGGER, "TownTalkClickEvent")
                     }
+
                     is VuukleEvent.YouMindLikeClickEvent -> {
                         /* Handle */
-                        Log.i(LoggerConstants.VUUKLE_LOGGER,"YouMindLikeClickEvent")
+                        Log.i(LoggerConstants.VUUKLE_LOGGER, "YouMindLikeClickEvent")
                     }
                 }
             }

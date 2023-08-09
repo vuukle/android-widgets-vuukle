@@ -8,23 +8,11 @@
     android:orientation="vertical"
     tools:context=".sample.SampleActivity">
 
-    <RelativeLayout
+    <com.vuukle.sdk.widget.VuukleView
+        android:id="@+id/vuukleView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <com.vuukle.sdk.widget.VuukleView
-            android:id="@+id/commentsView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="90dp"
-            android:overScrollMode="never"
-            android:scrollbars="none" />
-
-        <com.vuukle.sdk.widget.VuukleView
-            android:id="@+id/shareBarView"
-            android:layout_width="match_parent"
-            android:layout_height="90dp" />
-
-    </RelativeLayout>
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        android:scrollbars="none" />
 
 </LinearLayout>

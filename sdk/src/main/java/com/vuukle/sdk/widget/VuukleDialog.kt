@@ -18,6 +18,7 @@ import android.widget.RelativeLayout.TRUE
 import com.vuukle.sdk.clients.VuukleWebChromeClient
 import com.vuukle.sdk.clients.VuukleWebViewClient
 import com.vuukle.sdk.constants.logger.LoggerConstants
+import com.vuukle.sdk.extensions.removeSelf
 import com.vuukle.sdk.helpers.VuukleWebViewConfigurationHelper
 import com.vuukle.sdk.listeners.VuukleActionListener
 import com.vuukle.sdk.listeners.WebViewStateListener
@@ -48,9 +49,11 @@ class VuukleDialog(
 
     fun openDialog(url: String, webView: WebView) {
         if (isOpened) {
+            Log.i("wpefowpef","isOpened = true")
             onOpenPopupWindow(url, webView)
             return
         }
+
         popup = webView
         popup?.apply {
             VuukleWebViewConfigurationHelper.configure(this)
@@ -69,6 +72,9 @@ class VuukleDialog(
                 saveToWebViewLocalStorage(token, this)
             }
             VuukleViewManager.addPopupWebView(this)
+            Log.i("peodkwpeokdf","url = $url")
+            Log.i("peodkwpeokdf","webview url = ${webView.url}")
+            Log.i("peodkwpeokdf","webView.certificate = ${webView.hitTestResult.extra}")
             // Load URL
             this.loadUrl(url)
         }
@@ -90,9 +96,7 @@ class VuukleDialog(
         wrapper?.minimumHeight = MATCH_PARENT
         val keyboardHack = EditText(VuukleAndroidUtil.getActivity())
         keyboardHack.visibility = View.GONE
-        if (popup?.parent != null) {
-            (popup?.parent as? ViewGroup)?.removeView(popup)
-        }
+        popup.removeSelf()
         wrapper?.addView(
             popup,
             LinearLayout.LayoutParams.MATCH_PARENT,
@@ -169,23 +173,20 @@ class VuukleDialog(
 
     fun onOpenPopupWindow(url: String, webview: WebView) {
         Log.i(LoggerConstants.VUUKLE_LOGGER, "onOpenPopupWindow")
-        webView = WebView(VuukleAndroidUtil.getActivity())
 
-        webView?.apply {
-            VuukleWebViewConfigurationHelper.configure(this)
-            this.webChromeClient = vuukleWebChromeClient
-            this.webViewClient = VuukleWebViewClient(
-                identifier = identifier,
-                openPopupCallback = { url, webview ->
-                    this@VuukleDialog.onOpenPopupWindow(url, webview)
-                },
-                webViewStateListener = this@VuukleDialog
-            )
-            this.loadUrl(url)
-        }
-
+        VuukleWebViewConfigurationHelper.configure(webview)
+        webview.webChromeClient = vuukleWebChromeClient
+        webview.webViewClient = VuukleWebViewClient(
+            identifier = identifier,
+            openPopupCallback = { url, webview ->
+                this@VuukleDialog.onOpenPopupWindow(url, webview)
+            },
+            webViewStateListener = this@VuukleDialog
+        )
+        webview.loadUrl(url)
+        webview.removeSelf()
         this.wrapper?.addView(
-            webView,
+            webview,
             LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.MATCH_PARENT
         )

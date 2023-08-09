@@ -24,18 +24,16 @@ class VuukleWebViewClient(
         Log.i(LoggerConstants.VUUKLE_LOGGER,"isExternalAppOpened = $isExternalAppOpened")
         if (isExternalAppOpened) return true
 
-        if (!isExternalAppOpened) {
-            Log.i(LoggerConstants.VUUKLE_LOGGER,"url = $url")
-            val event = EventUtil.createEventByUrl(url)
-            if(event != null && actionListener != null){
-                Log.i(LoggerConstants.VUUKLE_LOGGER,"event = $event")
-                actionListener.onEvent(event, view)
-                return true
-            } else if(openPopupCallback != null) {
-                Log.i(LoggerConstants.VUUKLE_LOGGER,"open dialog from invoke")
-                openPopupCallback.invoke(url, view)
-                return true
-            }
+        Log.i(LoggerConstants.VUUKLE_LOGGER,"url = $url")
+        val event = EventUtil.createEventByUrl(url)
+        if(event != null && actionListener != null){
+            Log.i(LoggerConstants.VUUKLE_LOGGER,"event = $event")
+            actionListener.onEvent(event, view)
+            return true
+        } else if(openPopupCallback != null) {
+            Log.i(LoggerConstants.VUUKLE_LOGGER,"open dialog from invoke")
+            openPopupCallback.invoke(url, view)
+            return true
         }
 
         return false
