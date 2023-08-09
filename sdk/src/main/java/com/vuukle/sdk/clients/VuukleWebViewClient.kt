@@ -19,9 +19,11 @@ class VuukleWebViewClient(
     private val externalAppHandler = VuukleExternalAppHandler()
 
     override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-
+        Log.i("pweofkpweokf","url = $url")
         val isExternalAppOpened = externalAppHandler.handleExternalApp(url)
         Log.i(LoggerConstants.VUUKLE_LOGGER, "isExternalAppOpened = $isExternalAppOpened")
+        Log.i("pweofkpweokf","isExternalAppOpened = $isExternalAppOpened")
+
         if (isExternalAppOpened) return true
 
         Log.i(LoggerConstants.VUUKLE_LOGGER, "url = $url")

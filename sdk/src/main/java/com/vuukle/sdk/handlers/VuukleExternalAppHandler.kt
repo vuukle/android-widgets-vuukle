@@ -17,6 +17,10 @@ import java.net.URLDecoder
 
 class VuukleExternalAppHandler() {
 
+    companion object {
+        const val MAIL_TO = "mailto:"
+    }
+
     fun handleExternalApp(url: String): Boolean {
 
         return when {
@@ -58,8 +62,13 @@ class VuukleExternalAppHandler() {
 
         Keywords.WATS_APP.forEach {
             if (decodedurl.contains(it)) {
-                openApp("https://api.whatsapp.com/send?text=" + decodedurl.substring(decodedurl.indexOf(
-                    it) + it.length))
+                openApp(
+                    "https://api.whatsapp.com/send?text=" + decodedurl.substring(
+                        decodedurl.indexOf(
+                            it
+                        ) + it.length
+                    )
+                )
                 return true
             }
         }
@@ -68,19 +77,39 @@ class VuukleExternalAppHandler() {
     }
 
     private fun openEmail(url: String): Boolean {
-
         val decodedUrl = decodeUrl(url)
-        val emailIntent = Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-            "mailto", "", null))
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT,
-            decodedUrl.substring(decodedUrl.indexOf("subject=") + 8, decodedUrl.indexOf("&body")))
-        emailIntent.putExtra(Intent.EXTRA_TEXT,
-            decodedUrl.substring(decodedUrl.indexOf("body=") + 5))
+        Log.i("pweofkwepfk", "url = $url")
+        val emailIntent =
+            Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", "", null))
+        if (decodedUrl.startsWith(MAIL_TO)) {
+            val email = decodedUrl.substring(MAIL_TO.length)
+            emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
+        }
+
+        if (decodedUrl.contains("subject=")) {
+            emailIntent.putExtra(
+                Intent.EXTRA_SUBJECT,
+                decodedUrl.substring(
+                    decodedUrl.indexOf("subject=") + 8,
+                    decodedUrl.indexOf("&body")
+                )
+            )
+        }
+        if (decodedUrl.contains("body=")) {
+            emailIntent.putExtra(
+                Intent.EXTRA_TEXT,
+                decodedUrl.substring(decodedUrl.indexOf("body=") + 5)
+            )
+        }
         try {
             VuukleAndroidUtil.getActivity().startActivity(Intent.createChooser(emailIntent, null))
         } catch (ex: ActivityNotFoundException) {
-            VuukleAndroidUtil.getActivity().startActivity(Intent(Intent.ACTION_VIEW,
-                Uri.parse("market://details?id=com.google.android.gm")))
+            VuukleAndroidUtil.getActivity().startActivity(
+                Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("market://details?id=com.google.android.gm")
+                )
+            )
         }
         return true
     }
@@ -121,8 +150,10 @@ class VuukleExternalAppHandler() {
         for (packageInfo in packages) {
             Log.d("package", "Installed package :" + packageInfo.packageName)
             Log.d("package", "Source dir : " + packageInfo.sourceDir)
-            Log.d("package",
-                "Launch Activity :" + pm.getLaunchIntentForPackage(packageInfo.packageName))
+            Log.d(
+                "package",
+                "Launch Activity :" + pm.getLaunchIntentForPackage(packageInfo.packageName)
+            )
         }
 
         val appInstalled: Boolean = try {

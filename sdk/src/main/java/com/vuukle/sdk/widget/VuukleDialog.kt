@@ -50,7 +50,7 @@ class VuukleDialog(
 
     fun openDialog(url: String, webView: WebView) {
         if (isOpened) {
-            Log.i("wpefowpef", "isOpened = true")
+            Log.i("wpefowpef", "url = $url")
             Log.i("wpefowpef", "isDialog = isDialog")
             onOpenPopupWindow(url, webView)
             return
@@ -175,22 +175,23 @@ class VuukleDialog(
         }
     }
 
-    fun onOpenPopupWindow(url: String, webview: WebView) {
+    fun onOpenPopupWindow(url: String, webView: WebView) {
         Log.i(LoggerConstants.VUUKLE_LOGGER, "onOpenPopupWindow")
 
-        VuukleWebViewConfigurationHelper.configure(webview)
-        webview.webChromeClient = vuukleWebChromeClient
-        webview.webViewClient = VuukleWebViewClient(
+        val window = if (isDialog) webView else WebView(VuukleAndroidUtil.getActivity())
+        VuukleWebViewConfigurationHelper.configure(window)
+        window.webChromeClient = vuukleWebChromeClient
+        window.webViewClient = VuukleWebViewClient(
             identifier = identifier,
-            openPopupCallback = { url, webview ->
-                this@VuukleDialog.onOpenPopupWindow(url, webview)
+            openPopupCallback = { popupUrl, popupWebview ->
+                this@VuukleDialog.onOpenPopupWindow(popupUrl, popupWebview)
             },
             webViewStateListener = this@VuukleDialog
         )
-        webview.loadUrl(url)
-        webview.removeSelf()
+        window.loadUrl(url)
+        window.removeSelf()
         this.wrapper?.addView(
-            webview,
+            window,
             LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.MATCH_PARENT
         )
