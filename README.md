@@ -142,6 +142,7 @@
 
 
 2. Share Bar Widget
+
    2.1 Add the JitPack repository to your build file
       ```kotlin 
          allprojects {
@@ -280,6 +281,7 @@
    ```
 
 3. Quizly Widget
+
    3.1 Add the JitPack repository to your build file
       ```kotlin 
          allprojects {
