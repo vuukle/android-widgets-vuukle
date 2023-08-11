@@ -107,6 +107,7 @@
    
 
    1.9 Include Facebook SDK for Facebook functionality
+
    1.9.1  implementations to **build.gradle**
    ```kotlin
         implementation 'com.facebook.android:facebook-login:12.0.0'
