@@ -71,7 +71,7 @@ class SampleActivity : AppCompatActivity() {
             }
         })
 
-        // load comments in VuukleView
+        // load url in VuukleView
         vuukleManager.load(vuukleView, url)
         // Handle vuukle events
         // If you did not set event listener by default all events will be handled by VuukleManager
