@@ -13,7 +13,7 @@
 
    1.2 Include Vuukle Widget SDK dependency in **build.gradle**
       ```kotlin
-         implementation 'com.github.vuukle:android-widgets-vuukle:1.0.3'
+         implementation 'com.github.vuukle:android-widgets-vuukle:1.0.4'
       ```
 
    1.3 Provides **Public & Private** keys for establish connection with vuukle api's in Application **onCreate** function.
@@ -155,7 +155,7 @@
 
    2.2 Include Vuukle Widget SDK dependency in **build.gradle**
       ```kotlin
-         implementation 'com.github.vuukle:android-widgets-vuukle:1.0.3'
+         implementation 'com.github.vuukle:android-widgets-vuukle:1.0.4'
       ```
 
    2.3 Provides **Public & Private** keys for establish connection with vuukle api's in Application **onCreate** function.
@@ -295,7 +295,7 @@
 
    3.2 Include Vuukle Widget SDK dependency in **build.gradle**
       ```kotlin
-         implementation 'com.github.vuukle:android-widgets-vuukle:1.0.3'
+         implementation 'com.github.vuukle:android-widgets-vuukle:1.0.4'
       ```
 
    3.3 Provides **Public & Private** keys for establish connection with vuukle api's in Application **onCreate** function.
