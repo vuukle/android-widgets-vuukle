@@ -5,14 +5,14 @@ plugins {
 }
 
 android {
-    compileSdk 31
+    compileSdk 33
     lintOptions {
         abortOnError false
     }
     defaultConfig {
         applicationId "com.vuukle.webview"
         minSdk 19
-        targetSdk 31
+        targetSdk 33
         versionCode 1
         versionName "1.0"
         multiDexEnabled true

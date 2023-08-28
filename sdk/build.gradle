@@ -8,11 +8,11 @@ android {
     lintOptions {
         abortOnError false
     }
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         minSdk 19
-        targetSdk 31
+        targetSdk 33
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
@@ -58,7 +58,7 @@ afterEvaluate {
 
                 groupId = 'com.github.vuukle'
                 artifactId = 'android-widgets-vuukle'
-                version = '1.0.3'
+                version = '1.0.4'
             }
         }
     }
