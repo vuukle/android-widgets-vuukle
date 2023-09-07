@@ -13,8 +13,6 @@ class VuukleView : RelativeLayout {
     private var eventListener: VuukleViewEventListener? = null
     lateinit var webView: VuukleWebView
 
-    private var lastHeight = 0
-
     init {
         initParentWebView()
     }
