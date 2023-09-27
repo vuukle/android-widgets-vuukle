@@ -87,6 +87,10 @@ class SampleActivity : AppCompatActivity() {
                         /* Handle */
                         Log.i(LoggerConstants.VUUKLE_LOGGER, "YouMindLikeClickEvent")
                     }
+
+                    is VuukleEvent.SignInClickEvent -> {
+                        Log.i(LoggerConstants.VUUKLE_LOGGER, "SignInClickEvent")
+                    }
                 }
             }
         })

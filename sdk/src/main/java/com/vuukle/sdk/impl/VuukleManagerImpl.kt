@@ -44,12 +44,17 @@ class VuukleManagerImpl(val lifecycleOwner: LifecycleOwner) : VuukleManager, Vuu
     private val isDialog: (Boolean) -> Unit = {
         popupDialog.setIsDialog(it)
     }
+
+    private val onSignInClicked: () -> Unit = {
+        eventListener?.onNewEvent(VuukleEvent.SignInClickEvent())
+    }
     private val webChromeClient = VuukleWebChromeClient(
         identifier = identifier,
         actionListener = this,
         openPopupCallback = openPopupCallback,
         closeDialogClosure = closeDialogClosure,
-        isDialog = isDialog
+        isDialog = isDialog,
+        onSignInClicked = onSignInClicked
     )
     private val popupDialog = VuukleDialog(
         identifier = identifier,

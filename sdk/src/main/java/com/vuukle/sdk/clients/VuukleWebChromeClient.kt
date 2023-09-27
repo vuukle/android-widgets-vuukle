@@ -23,12 +23,16 @@ class VuukleWebChromeClient(
     private val actionListener: VuukleActionListener?,
     private val openPopupCallback: ((String, WebView) -> Unit)? = null,
     private val closeDialogClosure: () -> Unit,
-    private val isDialog:(Boolean) -> Unit
+    private val onSignInClicked: () -> Unit,
+    private val isDialog: (Boolean) -> Unit
 ) : WebChromeClient() {
 
     var window: WebView? = null
     var resultMessage: Message? = null
-    private val consoleMessageHandler = VuukleConsoleLogHandler(identifier)
+    private val consoleMessageHandler = VuukleConsoleLogHandler(
+        identifier = identifier,
+        onSignInClicked = onSignInClicked
+    )
 
     override fun onJsAlert(
         view: WebView?,

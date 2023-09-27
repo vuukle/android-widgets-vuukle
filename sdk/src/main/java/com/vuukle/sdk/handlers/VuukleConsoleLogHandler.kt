@@ -1,20 +1,17 @@
 package com.vuukle.sdk.handlers
 
 import android.annotation.SuppressLint
-import android.util.Log
-import com.vuukle.sdk.constants.logger.LoggerConstants
-import com.vuukle.sdk.utils.VuukleManagerUtil
 
-class VuukleConsoleLogHandler(val identifier: Int) {
+class VuukleConsoleLogHandler(
+    val identifier: Int,
+    private val onSignInClicked: () -> Unit
+) {
 
     @SuppressLint("LongLogTag")
     fun handle(consoleMessage: String, sourceId: String) {
-        Log.i("ecececrevvrv", consoleMessage)
-//        when {
-//            isLogoutAction(consoleMessage) -> VuukleManagerUtil.getActionManager()?.logout()
-//            isSSOSignIn(consoleMessage) -> VuukleManagerUtil.getActionManager()?.onSSOSigiIn(identifier)
-//            else -> Log.i(LoggerConstants.VUUKLE_LOGGER, consoleMessage)
-//        }
+        if (consoleMessage == "signin-clicked") {
+            onSignInClicked.invoke()
+        }
     }
 
     private fun isLogoutAction(text: String) = text.contains("logout-clicked")

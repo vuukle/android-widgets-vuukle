@@ -4,9 +4,11 @@ open class VuukleEvent {
 
     class YouMindLikeClickEvent(
         val url: String
-    ): VuukleEvent()
+    ) : VuukleEvent()
 
     class TownTalkClickEvent(
         val url: String
-    ): VuukleEvent()
+    ) : VuukleEvent()
+
+    class SignInClickEvent() : VuukleEvent()
 }
