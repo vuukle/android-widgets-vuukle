@@ -29,7 +29,7 @@ class SampleActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         setContentView(R.layout.activity_sample)
         getDataFromBundle()
         initViews()
@@ -72,22 +72,12 @@ class SampleActivity : AppCompatActivity() {
         })
 
         // load url in VuukleView
-        vuukleManager.load(vuukleView, url)
+        vuukleManager.load(vuukleView, url, "#FFFF00")
         // Handle vuukle events
         // If you did not set event listener by default all events will be handled by VuukleManager
         vuukleManager.setEventListener(object : VuukleEventListener {
             override fun onNewEvent(event: VuukleEvent) {
                 when (event) {
-                    is VuukleEvent.TownTalkClickEvent -> {
-                        /* Handle */
-                        Log.i(LoggerConstants.VUUKLE_LOGGER, "TownTalkClickEvent")
-                    }
-
-                    is VuukleEvent.YouMindLikeClickEvent -> {
-                        /* Handle */
-                        Log.i(LoggerConstants.VUUKLE_LOGGER, "YouMindLikeClickEvent")
-                    }
-
                     is VuukleEvent.SignInClickEvent -> {
                         Log.i(LoggerConstants.VUUKLE_LOGGER, "SignInClickEvent")
                     }
@@ -106,7 +96,7 @@ class SampleActivity : AppCompatActivity() {
         // Handle on login click
         loginSSOButton.setOnClickListener {
             // Login user by SSO using email and username
-            vuukleManager.loginBySSO("test@gamil.com", "testUserName")
+            vuukleManager.loginBySSO("ewogICJ1c2VybmFtZSI6ICJTYW1wbGUgVXNlciBOYW1lIiwKICAiZW1haWwiOiAibW91c0BlbWFpbC5jb20iLAogICJwdWJsaWNfa2V5IjogImVhZDQxZTQ2LWE1ZmQtMTFlMi1iYzk3LWJjNzY0ZTA0OTJjYyIsCiAgInNpZ25hdHVyZSI6ICIwQzlDMzE0RTM2Qjc4MTc4NkRBNjVGMkNGN0UzMEM3MzUyNjU1MjczNzg2ODMxMzE0QTkzOTRBMjkyNzdDRUI1OURCMzAwNTIwM0E0MkYyREVBOEExNUE0NDYzMDI0M0U1QjRGMTBDMTlBQjBDN0Q3MDNBQzI5RDZDNzhBMDE4MCIKfQ==")
         }
         // Handle on logout click
         logoutSSOButton.setOnClickListener {

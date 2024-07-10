@@ -56,7 +56,7 @@
    ```
 
 
-   Create **VuukleManager** instance and load
+   Create **VuukleManager** instance and load. Add color parameter to the load function to allow for changing the background color if needed.
    ```kotlin
         private fun createVuukleManager() {
            // Create Vuukle manager instance
@@ -70,7 +70,7 @@
            })
    
            // load comments in VuukleView
-           vuukleManager.load(commentsView, VuukleConstants.COMMENTS_URL)
+           vuukleManager.load(commentsView, VuukleConstants.COMMENTS_URL, "#FFFF00")
    
            // Handle vuukle events
            // If you did not set event listener by default all events will be handled by VuukleManager
@@ -201,8 +201,8 @@
            })
            // Handle on login click
            loginSSOButton.setOnClickListener {
-               // Login user by SSO using email and username
-               vuukleManager.loginBySSO("test@gamil.com", "testUserName")
+               // Login user by SSO using token
+               vuukleManager.loginBySSO("token here")
            }
            // Handle on logout click
            logoutSSOButton.setOnClickListener {

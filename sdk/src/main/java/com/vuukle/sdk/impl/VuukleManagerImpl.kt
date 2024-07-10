@@ -90,9 +90,9 @@ class VuukleManagerImpl(val lifecycleOwner: LifecycleOwner) : VuukleManager, Vuu
         lifecycleOwner.lifecycle.addObserver(lifecycleObserver)
     }
 
-    override fun load(view: VuukleView, url: String) {
+    override fun load(view: VuukleView, url: String, backgroundColor: String?) {
         val vieIdentifier = UUID.randomUUID().toString()
-        VuukleManagerUtil.getUrlManager()?.addUrl(vieIdentifier, url)
+        VuukleManagerUtil.getUrlManager()?.addUrl(vieIdentifier, url, backgroundColor)
         Log.i(LoggerConstants.VUUKLE_LOGGER, "viewIdentifier = $vieIdentifier")
         viewManager?.addVuukleView(vieIdentifier, view)
         Log.i(LoggerConstants.VUUKLE_LOGGER, "VuukleView added into viewManager")
@@ -147,9 +147,9 @@ class VuukleManagerImpl(val lifecycleOwner: LifecycleOwner) : VuukleManager, Vuu
         this.ssoEventListener = listener
     }
 
-    override fun loginBySSO(email: String, userName: String) {
+    override fun loginBySSO(token: String?) {
         // Login user
-        VuukleManagerUtil.getAuthManager()?.login(email, userName)
+        VuukleManagerUtil.getAuthManager()?.login(token)
         // Clear browser history
         viewManager?.clearHistory()
         // Logout facebook

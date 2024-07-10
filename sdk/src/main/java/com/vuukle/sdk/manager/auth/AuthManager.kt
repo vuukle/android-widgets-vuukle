@@ -1,9 +1,7 @@
 package com.vuukle.sdk.manager.auth
 
-import android.os.Build
 import android.os.Handler
 import android.os.Looper
-import android.util.Base64.DEFAULT
 import android.util.Log
 import android.webkit.WebStorage
 import android.webkit.WebView
@@ -19,7 +17,7 @@ import org.json.JSONObject
 import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
-import java.util.*
+import java.util.Locale
 
 class AuthManager {
 
@@ -68,19 +66,10 @@ class AuthManager {
      * Login by user email and Name
      */
     @Synchronized
-    fun login(email: String?, userName: String?): Boolean {
+    fun login(token: String?): Boolean {
 
-        if (email.isNullOrEmpty() || userName.isNullOrEmpty()) return false
-
-        val authModel = generateAuthenticationModel(email, userName)
-        val authJsonString = authModel.toJson()
-
-        val authToken = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            Base64.getEncoder().encodeToString(authJsonString.toByteArray(Charsets.UTF_8))
-        } else {
-            android.util.Base64.encodeToString(authJsonString.toByteArray(Charsets.UTF_8), DEFAULT)
-        }
-        storageManager.putData(tokenKey, authToken)
+        if (token.isNullOrEmpty()) return false
+        storageManager.putData(tokenKey, token)
         return true
     }
 

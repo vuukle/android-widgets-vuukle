@@ -58,7 +58,7 @@ afterEvaluate {
 
                 groupId = 'com.github.vuukle'
                 artifactId = 'android-widgets-vuukle'
-                version = '1.0.4'
+                version = '1.0.7'
             }
         }
     }

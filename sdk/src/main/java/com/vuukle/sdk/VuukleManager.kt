@@ -32,8 +32,8 @@ interface VuukleManager {
         }
     }
 
-    fun load(view: VuukleView, url: String)
-    fun loginBySSO(email: String, userName: String)
+    fun load(view: VuukleView, url: String, backgroundColor: String? = null)
+    fun loginBySSO(token: String?)
     fun addErrorListener(listener: VuukleErrorListener)
     fun addCustomSSOEventListener(listener: SSOEventListener)
     fun setEventListener(listener: VuukleEventListener)

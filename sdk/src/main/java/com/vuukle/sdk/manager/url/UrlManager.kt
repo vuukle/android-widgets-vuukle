@@ -1,14 +1,20 @@
 package com.vuukle.sdk.manager.url
 
+import com.vuukle.sdk.extensions.formatColor
 import com.vuukle.sdk.utils.VuukleManagerUtil
-import java.util.*
+import java.util.TreeMap
 
 class UrlManager {
 
     private var urlList = TreeMap<String, String>()
 
-    fun addUrl(identifier: String, url: String) {
-        urlList[identifier] = url
+    fun addUrl(identifier: String, url: String, backgroundColor: String?) {
+        var mUrl = url
+        if (backgroundColor != null) {
+            val formattedColor = backgroundColor.formatColor()
+            mUrl = url.plus("&background=$formattedColor")
+        }
+        urlList[identifier] = mUrl
     }
 
     fun getUrl(identifier: String): String {
@@ -17,9 +23,11 @@ class UrlManager {
 
         if (VuukleManagerUtil.getAuthManager()?.isLoggedIn() == true) {
             val char = if (url.contains("?")) "&" else "?"
-            url = url.plus("${char}sso=true&loginToken=${
-                VuukleManagerUtil.getAuthManager()?.getToken()
-            }")
+            url = url.plus(
+                "${char}sso=true&loginToken=${
+                    VuukleManagerUtil.getAuthManager()?.getToken()
+                }"
+            )
         }
 
         return url
