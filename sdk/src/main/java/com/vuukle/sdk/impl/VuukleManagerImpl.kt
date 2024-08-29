@@ -15,6 +15,7 @@ import com.vuukle.sdk.listeners.SSOEventListener
 import com.vuukle.sdk.listeners.VuukleActionListener
 import com.vuukle.sdk.listeners.VuukleErrorListener
 import com.vuukle.sdk.listeners.VuukleEventListener
+import com.vuukle.sdk.listeners.VuukleEventPopupListener
 import com.vuukle.sdk.manager.storage.impl.StorageImpl
 import com.vuukle.sdk.manager.url.VuukleViewManager
 import com.vuukle.sdk.model.VuukleEvent
@@ -67,6 +68,7 @@ class VuukleManagerImpl(val lifecycleOwner: LifecycleOwner) : VuukleManager, Vuu
     private var ssoEventListener: SSOEventListener? = null
     private var errorListener: VuukleErrorListener? = null
     private var eventListener: VuukleEventListener? = null
+    private var popupListener: VuukleEventPopupListener? = null
 
     private val lifecycleObserver = object : DefaultLifecycleObserver {
         override fun onCreate(owner: LifecycleOwner) {
@@ -119,8 +121,15 @@ class VuukleManagerImpl(val lifecycleOwner: LifecycleOwner) : VuukleManager, Vuu
         eventListener = listener
     }
 
+    override fun setPopupListner(listener: VuukleEventPopupListener) {
+        popupListener = listener
+    }
+
     override fun onOpenPopupWindow(url: String, webView: WebView) {
-        popupDialog.openDialog(url, webView)
+        if (popupListener!=null)
+            popupListener?.onPopupOpen(url)
+        else
+            popupDialog.openDialog(url, webView)
     }
 
     override fun onReloadAndRestore() {

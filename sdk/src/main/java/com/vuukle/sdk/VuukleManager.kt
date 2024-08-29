@@ -9,6 +9,7 @@ import com.vuukle.sdk.impl.VuukleManagerImpl
 import com.vuukle.sdk.listeners.SSOEventListener
 import com.vuukle.sdk.listeners.VuukleErrorListener
 import com.vuukle.sdk.listeners.VuukleEventListener
+import com.vuukle.sdk.listeners.VuukleEventPopupListener
 import com.vuukle.sdk.utils.ResultLauncherUtil
 import com.vuukle.sdk.utils.VuukleAndroidUtil
 import com.vuukle.sdk.utils.VuukleManagerUtil
@@ -37,6 +38,7 @@ interface VuukleManager {
     fun addErrorListener(listener: VuukleErrorListener)
     fun addCustomSSOEventListener(listener: SSOEventListener)
     fun setEventListener(listener: VuukleEventListener)
+    fun setPopupListner(listener: VuukleEventPopupListener)
     fun logout()
 
     class Builder(val lifecycleOwner: LifecycleOwner) {

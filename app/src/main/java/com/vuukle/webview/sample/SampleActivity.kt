@@ -13,6 +13,7 @@ import com.vuukle.sdk.exeptions.VuukleException
 import com.vuukle.sdk.listeners.SSOEventListener
 import com.vuukle.sdk.listeners.VuukleErrorListener
 import com.vuukle.sdk.listeners.VuukleEventListener
+import com.vuukle.sdk.listeners.VuukleEventPopupListener
 import com.vuukle.sdk.model.VuukleEvent
 import com.vuukle.sdk.widget.VuukleView
 import com.vuukle.webview.MainActivity.Companion.URL
@@ -70,6 +71,13 @@ class SampleActivity : AppCompatActivity() {
                     .show()
             }
         })
+
+        // Uncomment this to get the popup url and open that webapge inside a new view
+//        vuukleManager.setPopupListner(object : VuukleEventPopupListener{
+//            override fun onPopupOpen(url: String) {
+//                Log.d("LOad URL","url="+url)
+//            }
+//        })
 
         // load url in VuukleView
         vuukleManager.load(vuukleView, url, "#FFFF00")

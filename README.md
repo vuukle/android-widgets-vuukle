@@ -82,6 +82,14 @@
                    }
                }
            })
+    
+           // Handle vuukle popup
+           // If you do not set this event listener by default popup showing event will be handled by VuukleManager
+           vuukleManager.setPopupListner(object : VuukleEventPopupListener{
+               override fun onPopupOpen(url: String) {
+                    
+               }
+           })
         }
    ```
 
@@ -132,6 +140,14 @@
                        is VuukleEvent.TownTalkClickEvent -> { /* Handle */ }
                        is VuukleEvent.YouMindLikeClickEvent -> { /* Handle */ }
                    }
+               }
+           })
+    
+           // Handle vuukle popup
+           // If you do not set this event listener by default popup showing event will be handled by VuukleManager
+           vuukleManager.setPopupListner(object : VuukleEventPopupListener{ 
+               override fun onPopupOpen(url: String) {
+        
                }
            })
         }
@@ -186,6 +202,15 @@
                    }
                }
            })
+
+           // Handle vuukle popup
+           // If you do not set this event listener by default popup showing event will be handled by VuukleManager
+           vuukleManager.setPopupListner(object : VuukleEventPopupListener{ 
+               override fun onPopupOpen(url: String) {
+               
+               } 
+           })
+    
         }
    ```
 
