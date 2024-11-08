@@ -40,6 +40,7 @@ interface VuukleManager {
     fun setEventListener(listener: VuukleEventListener)
     fun setPopupListner(listener: VuukleEventPopupListener)
     fun logout()
+    fun onDestroyActivity()
 
     class Builder(val lifecycleOwner: LifecycleOwner) {
 

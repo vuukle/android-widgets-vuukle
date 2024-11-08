@@ -210,6 +210,10 @@ class VuukleManagerImpl(val lifecycleOwner: LifecycleOwner) : VuukleManager, Vuu
         viewManager?.fetchReload()
     }
 
+    override fun onDestroyActivity() {
+        onDestroy()
+    }
+
     fun onDestroy() {
         VuukleManagerUtil.getAuthManager()?.saveVuukleToken()
         lifecycleOwner.lifecycle.removeObserver(lifecycleObserver)
