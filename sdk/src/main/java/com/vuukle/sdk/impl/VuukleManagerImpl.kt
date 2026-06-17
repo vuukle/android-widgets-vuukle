@@ -1,6 +1,11 @@
 package com.vuukle.sdk.impl
 
 import android.util.Log
+import io.sentry.Sentry
+import io.sentry.SentryEvent
+import io.sentry.SentryLevel
+import io.sentry.android.core.SentryAndroid
+import com.vuukle.sdk.BuildConfig
 import android.webkit.CookieManager
 import android.webkit.WebView
 import androidx.lifecycle.DefaultLifecycleObserver
@@ -90,7 +95,32 @@ class VuukleManagerImpl(val lifecycleOwner: LifecycleOwner) : VuukleManager, Vuu
     init {
         // Add lifecycleObserver
         lifecycleOwner.lifecycle.addObserver(lifecycleObserver)
+        initSentryIfConfigured()
     }
+
+    private fun initSentryIfConfigured() {
+        val dsn = BuildConfig.SENTRY_DSN
+        if (dsn.isBlank()) return
+        if (Sentry.isEnabled()) return // already initialized by host app
+        try {
+            val context = com.vuukle.sdk.utils.VuukleAndroidUtil.getActivity()
+            SentryAndroid.init(context) { options ->
+                options.dsn = dsn
+                options.release = "vuukle-android-sdk@${BuildConfig.LIBRARY_VERSION}"
+                options.environment = if (BuildConfig.DEBUG) "debug" else "production"
+                // Tag every event so we can filter Vuukle SDK crashes vs publisher app crashes
+                options.beforeSend = io.sentry.SentryOptions.BeforeSendCallback { event, _ ->
+                    event.setTag("source", "vuukle-sdk")
+                    event.setTag("vuukle.sdk.version", BuildConfig.LIBRARY_VERSION)
+                    event
+                }
+            }
+            Log.i(LoggerConstants.VUUKLE_LOGGER, "Sentry initialized for Vuukle SDK")
+        } catch (t: Throwable) {
+            Log.w(LoggerConstants.VUUKLE_LOGGER, "Sentry init failed - continuing without telemetry: $t")
+        }
+    }
+
 
     override fun load(view: VuukleView, url: String, backgroundColor: String?) {
         val vieIdentifier = UUID.randomUUID().toString()
@@ -152,6 +182,9 @@ class VuukleManagerImpl(val lifecycleOwner: LifecycleOwner) : VuukleManager, Vuu
     }
 
     override fun onSendError(exception: VuukleException) {
+        if (Sentry.isEnabled()) {
+            Sentry.captureException(exception)
+        }
         errorListener?.onError(exception)
     }
 
