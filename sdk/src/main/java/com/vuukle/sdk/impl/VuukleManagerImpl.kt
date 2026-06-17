@@ -109,7 +109,8 @@ class VuukleManagerImpl(val lifecycleOwner: LifecycleOwner) : VuukleManager, Vuu
         VuukleWebViewConfigurationHelper.configure(vuukleView.webView)
         // configure cookies
         CookieManager.getInstance().setAcceptCookie(true)
-        CookieManager.allowFileSchemeCookies()
+        // SECURITY: file-scheme cookies were enabled here; removed - cross-scheme cookie
+        // access was a real risk and AMP content loads from https only.
         VuukleManagerUtil.getUrlManager()?.getUrl(vieIdentifier)?.let {
             vuukleView.webView.loadUrl(it)
         }
@@ -139,9 +140,15 @@ class VuukleManagerImpl(val lifecycleOwner: LifecycleOwner) : VuukleManager, Vuu
 
     override fun onReloadAndSave() {
         viewManager?.reloadAll()
-        Thread {
-            VuukleManagerUtil.getAuthManager()?.saveVuukleToken()
-        }.start()
+        // Token save is fire-and-forget. If activity is destroyed mid-save we don't care -
+        // saveVuukleToken() writes to SharedPreferences which is safe across teardown.
+        Thread(Runnable {
+            try {
+                VuukleManagerUtil.getAuthManager()?.saveVuukleToken()
+            } catch (t: Throwable) {
+                android.util.Log.w(LoggerConstants.VUUKLE_LOGGER, "saveVuukleToken failed: $t")
+            }
+        }, "Vuukle-TokenSave").start()
     }
 
     override fun onSendError(exception: VuukleException) {
@@ -203,7 +210,8 @@ class VuukleManagerImpl(val lifecycleOwner: LifecycleOwner) : VuukleManager, Vuu
         // Logout user
         VuukleManagerUtil.getAuthManager()?.logout()
         // Clear all cookies
-        CookieManager.getInstance().removeAllCookie()
+        CookieManager.getInstance().removeAllCookies(null)
+        CookieManager.getInstance().flush()
         // Clear history
         viewManager?.clearHistory()
         // Reload WebView using urlManager

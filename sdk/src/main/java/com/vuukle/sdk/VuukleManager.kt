@@ -23,10 +23,16 @@ interface VuukleManager {
             VuukleKeys.checkKeys()
             VuukleAndroidUtil.setActivity(fragmentActivity)
 
-            if (VuukleAndroidUtil.getActivity().lifecycle.currentState != Lifecycle.State.INITIALIZED &&
-                VuukleAndroidUtil.getActivity().lifecycle.currentState != Lifecycle.State.CREATED
-            ) {
-                throw VuukleException("Vuukle manager must be initialized in activity onCreate function")
+            // Previously crashed if init() wasn't called in onCreate. Publishers like
+            // Manorama legitimately init in onResume or after a network check - throwing
+            // here was hostile. We now log a warning instead.
+            val state = VuukleAndroidUtil.getActivity().lifecycle.currentState
+            if (state != Lifecycle.State.INITIALIZED && state != Lifecycle.State.CREATED) {
+                android.util.Log.w(
+                    "VuukleSDK",
+                    "VuukleManager.init() called outside Activity.onCreate (lifecycle=$state). " +
+                    "This may lead to unexpected behavior; prefer initializing in onCreate."
+                )
             }
             VuukleManagerUtil.init()
             ResultLauncherUtil.init()

@@ -50,14 +50,11 @@ class VuukleDialog(
 
     fun openDialog(url: String, webView: WebView) {
         if (isOpened) {
-            Log.i("wpefowpef", "url = $url")
-            Log.i("wpefowpef", "isDialog = isDialog")
             onOpenPopupWindow(url, webView)
             return
         }
 
 //        popup = if (isDialog) webView else WebView(VuukleAndroidUtil.getActivity())
-        Log.i("wpefowpef", "isDialog = isDialog")
         popup = if (isDialog) webView else WebView(VuukleAndroidUtil.getActivity())
         popup?.apply {
             VuukleWebViewConfigurationHelper.configure(this)
@@ -76,9 +73,6 @@ class VuukleDialog(
                 saveToWebViewLocalStorage(token, this)
             }
             VuukleViewManager.addPopupWebView(this)
-            Log.i("peodkwpeokdf", "url = $url")
-            Log.i("peodkwpeokdf", "webview url = ${webView.url}")
-            Log.i("peodkwpeokdf", "webView.certificate = ${webView.hitTestResult.extra}")
             // Load URL
             this.loadUrl(url)
         }

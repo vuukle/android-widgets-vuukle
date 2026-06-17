@@ -78,7 +78,6 @@ class VuukleExternalAppHandler() {
 
     private fun openEmail(url: String): Boolean {
         val decodedUrl = decodeUrl(url)
-        Log.i("pweofkwepfk", "url = $url")
         val emailIntent =
             Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", "", null))
         if (decodedUrl.startsWith(MAIL_TO)) {
@@ -148,8 +147,8 @@ class VuukleExternalAppHandler() {
             pm.getInstalledApplications(PackageManager.GET_META_DATA)
 
         for (packageInfo in packages) {
-            Log.d("package", "Installed package :" + packageInfo.packageName)
-            Log.d("package", "Source dir : " + packageInfo.sourceDir)
+            Log.v("VuukleSDK", "Installed package: " + packageInfo.packageName)
+            Log.v("VuukleSDK", "Source dir: " + packageInfo.sourceDir)
             Log.d(
                 "package",
                 "Launch Activity :" + pm.getLaunchIntentForPackage(packageInfo.packageName)
